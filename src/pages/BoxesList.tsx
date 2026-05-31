@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingError } from '../components/LoadingError';
+import { PhotoThumb } from '../components/PhotoThumb';
 import { fetchBoxes, filterBoxes, updateBoxStatus } from '../lib/boxes';
 import { boxesToCsv, downloadCsv } from '../lib/csv';
 import { statuses, type BoxStatus, type MoveBox } from '../types';
@@ -37,12 +38,13 @@ export function BoxesList() {
       <div className="table-wrap">
         <table>
           <thead>
-            <tr><th>Select</th><th>Box</th><th>Contents</th><th>Destination</th><th>Status</th><th>Priority</th><th>Update</th></tr>
+            <tr><th>Select</th><th>Photo</th><th>Box</th><th>Contents</th><th>Destination</th><th>Status</th><th>Priority</th><th>Update</th></tr>
           </thead>
           <tbody>
             {filtered.map((box) => (
               <tr key={box.id}>
                 <td><input type="checkbox" checked={selected.includes(box.id)} onChange={() => toggle(box.id)} /></td>
+                <td><PhotoThumb box={box} label={`${box.box_number} thumbnail`} /></td>
                 <td><Link to={`/box/${box.box_number}`}>{box.box_number}</Link></td>
                 <td>{box.title || box.contents}</td>
                 <td>{box.destination_room}</td>

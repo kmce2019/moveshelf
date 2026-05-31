@@ -14,6 +14,8 @@ export type MoveBox = {
   status: BoxStatus;
   current_location: string | null;
   notes: string | null;
+  photo_path: string | null;
+  photo_url: string | null;
   label_printed: boolean;
   created_at: string;
   updated_at: string;
@@ -36,5 +38,7 @@ export const emptyBoxInput = (boxNumber: string): BoxInput => ({
   status: 'Planned',
   current_location: '',
   notes: '',
+  photo_path: null,
+  photo_url: null,
   label_printed: false,
 });

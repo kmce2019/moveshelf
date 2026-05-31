@@ -11,6 +11,8 @@ const clean = (box: BoxInput) => ({
   category: box.category?.trim() || null,
   current_location: box.current_location?.trim() || null,
   notes: box.notes?.trim() || null,
+  photo_path: box.photo_path?.trim() || null,
+  photo_url: box.photo_url?.trim() || null,
 });
 
 const cleanPartial = (box: Partial<BoxInput>) => ({
@@ -23,6 +25,8 @@ const cleanPartial = (box: Partial<BoxInput>) => ({
   ...(box.category !== undefined ? { category: box.category?.trim() || null } : {}),
   ...(box.current_location !== undefined ? { current_location: box.current_location?.trim() || null } : {}),
   ...(box.notes !== undefined ? { notes: box.notes?.trim() || null } : {}),
+  ...(box.photo_path !== undefined ? { photo_path: box.photo_path?.trim() || null } : {}),
+  ...(box.photo_url !== undefined ? { photo_url: box.photo_url?.trim() || null } : {}),
 });
 
 export async function fetchBoxes() {
@@ -78,7 +82,7 @@ export function filterBoxes(boxes: MoveBox[], query: string) {
   const q = query.trim().toLowerCase();
   if (!q) return boxes;
   return boxes.filter((box) =>
-    [box.box_number, box.title, box.contents, box.origin_room, box.destination_room, box.status, box.priority, box.category, box.current_location]
+    [box.box_number, box.title, box.contents, box.origin_room, box.destination_room, box.status, box.priority, box.category, box.current_location, box.notes]
       .filter(Boolean)
       .some((value) => String(value).toLowerCase().includes(q)),
   );

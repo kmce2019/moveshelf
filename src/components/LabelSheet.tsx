@@ -17,6 +17,7 @@ export function LabelSheet({ boxes }: { boxes: MoveBox[] }) {
             <div className="label-meta">
               <span>{box.priority}</span>
               {box.fragile && <span>FRAGILE</span>}
+              {(box.photo_path || box.photo_url) && <span>PHOTO</span>}
               <span>{box.status}</span>
             </div>
             <p>{box.contents || box.title || 'No contents listed'}</p>

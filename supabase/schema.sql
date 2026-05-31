@@ -13,10 +13,15 @@ create table if not exists public.boxes (
   status text default 'Planned' check (status in ('Planned', 'Packed', 'Loaded', 'Delivered', 'Unpacked', 'Missing')),
   current_location text,
   notes text,
+  photo_path text,
+  photo_url text,
   label_printed boolean default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.boxes add column if not exists photo_path text;
+alter table public.boxes add column if not exists photo_url text;
 
 create index if not exists boxes_box_number_idx on public.boxes (box_number);
 create index if not exists boxes_status_idx on public.boxes (status);
@@ -58,3 +63,26 @@ on public.boxes for update
 to anon
 using (true)
 with check (true);
+
+insert into storage.buckets (id, name, public)
+values ('box-photos', 'box-photos', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Allow anonymous photo reads" on storage.objects;
+create policy "Allow anonymous photo reads"
+on storage.objects for select
+to anon
+using (bucket_id = 'box-photos');
+
+drop policy if exists "Allow anonymous photo uploads" on storage.objects;
+create policy "Allow anonymous photo uploads"
+on storage.objects for insert
+to anon
+with check (bucket_id = 'box-photos');
+
+drop policy if exists "Allow anonymous photo updates" on storage.objects;
+create policy "Allow anonymous photo updates"
+on storage.objects for update
+to anon
+using (bucket_id = 'box-photos')
+with check (bucket_id = 'box-photos');

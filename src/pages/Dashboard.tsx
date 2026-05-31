@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BoxCard } from '../components/BoxCard';
 import { LoadingError } from '../components/LoadingError';
+import { PhotoThumb } from '../components/PhotoThumb';
 import { fetchBoxes, filterBoxes } from '../lib/boxes';
 import type { MoveBox } from '../types';
 
@@ -58,6 +59,7 @@ export function Dashboard() {
             <div className="result-list">
               {results.map((box) => (
                 <Link className="search-result" to={`/box/${box.box_number}`} key={box.id}>
+                  <PhotoThumb box={box} label={`${box.box_number} thumbnail`} />
                   <strong>{matchingText(box, query)}</strong>
                   <span>{box.box_number}</span>
                   <span>{box.destination_room || 'Destination TBD'}</span>

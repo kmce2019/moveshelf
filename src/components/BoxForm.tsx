@@ -4,12 +4,15 @@ import { priorities, statuses, type BoxInput } from '../types';
 type Props = {
   value: BoxInput;
   busy?: boolean;
+  photoPreview?: string;
+  photoError?: string;
   submitLabel: string;
+  onPhotoChange?: (file: File | null) => void;
   onChange: (value: BoxInput) => void;
   onSubmit: (intent: 'save' | 'another' | 'print') => void;
 };
 
-export function BoxForm({ value, busy, submitLabel, onChange, onSubmit }: Props) {
+export function BoxForm({ value, busy, photoPreview, photoError, submitLabel, onPhotoChange, onChange, onSubmit }: Props) {
   const update = <K extends keyof BoxInput>(key: K, next: BoxInput[K]) => onChange({ ...value, [key]: next });
   const submit = (event: FormEvent, intent: 'save' | 'another' | 'print') => {
     event.preventDefault();
@@ -69,6 +72,22 @@ export function BoxForm({ value, busy, submitLabel, onChange, onSubmit }: Props)
       <div className="field span-2">
         <label htmlFor="notes">Notes</label>
         <textarea id="notes" rows={3} value={value.notes || ''} onChange={(event) => update('notes', event.target.value)} />
+      </div>
+      <div className="field span-2">
+        <label htmlFor="photo">Box photo</label>
+        <input
+          id="photo"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={(event) => onPhotoChange?.(event.target.files?.[0] || null)}
+        />
+        {photoError && <p className="notice error">{photoError}</p>}
+        {photoPreview ? (
+          <img className="photo-preview" src={photoPreview} alt={`${value.box_number} preview`} />
+        ) : (
+          <div className="photo-placeholder">No photo selected</div>
+        )}
       </div>
       <div className="button-row span-2">
         <button disabled={busy} onClick={(event) => submit(event, 'save')}>{submitLabel}</button>

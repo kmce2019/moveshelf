@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { LoadingError } from '../components/LoadingError';
 import { fetchBoxByNumber, updateBoxStatus } from '../lib/boxes';
+import { boxPhotoUrl } from '../lib/photos';
 import { publicAppUrl } from '../lib/supabase';
 import { statuses, type BoxStatus, type MoveBox } from '../types';
 
@@ -24,12 +25,18 @@ export function BoxDetail() {
 
   if (loading || error) return <LoadingError loading={loading} error={error} />;
   if (!box) return <p className="notice error">Box not found.</p>;
+  const photoUrl = boxPhotoUrl(box);
 
   return (
     <div className="detail-layout">
       <section className="detail-main">
         <p className="eyebrow">{box.status}</p>
         <h2>{box.box_number}</h2>
+        {photoUrl ? (
+          <img className="detail-photo" src={photoUrl} alt={`${box.box_number} contents`} />
+        ) : (
+          <div className="detail-photo placeholder">No photo yet</div>
+        )}
         <h3>{box.title || 'Untitled box'}</h3>
         <dl className="detail-list">
           <dt>Contents</dt><dd>{box.contents || 'No contents listed'}</dd>

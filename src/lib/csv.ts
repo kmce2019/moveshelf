@@ -13,6 +13,8 @@ const fields = [
   'status',
   'current_location',
   'notes',
+  'photo_path',
+  'photo_url',
   'label_printed',
   'created_at',
   'updated_at',
@@ -81,6 +83,8 @@ export function rowToBoxInput(row: Record<string, string>): BoxInput {
     status: (row.status as BoxInput['status']) || 'Planned',
     current_location: row.current_location || '',
     notes: row.notes || '',
+    photo_path: row.photo_path || null,
+    photo_url: row.photo_url || null,
     label_printed: ['true', 'yes', '1'].includes(String(row.label_printed).toLowerCase()),
   };
 }

@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { PhotoThumb } from './PhotoThumb';
 import type { MoveBox } from '../types';
 
 export function BoxCard({ box }: { box: MoveBox }) {
   return (
     <article className="box-card">
+      <PhotoThumb box={box} label={`${box.box_number} thumbnail`} />
       <div>
         <Link className="box-number" to={`/box/${box.box_number}`}>{box.box_number}</Link>
         <h3>{box.title || box.contents?.slice(0, 70) || 'Untitled box'}</h3>
